@@ -1,0 +1,10 @@
+---
+ship:
+  ACCELERATION: 2
+  ROTATION_SPEED: 2
+  BREAKS: 7.5
+controls:
+  forward: 119
+  backward: 115
+  left: 100
+  right: 97
