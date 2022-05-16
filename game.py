@@ -1,19 +1,16 @@
 #!/usr/bin/env python3
-
-
 # ------- make exe files: auto-py-to-exe
 
 import pyglet
 from pyglet.window import key
 from pyglet import gl
 
-import random
-import time
-import math
-
 import yaml
 from yaml import Loader
 
+import random
+import time
+import math
 
 # -- import settings from file
 
