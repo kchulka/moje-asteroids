@@ -1,0 +1,24 @@
+---
+ship:
+  ACCELERATION: 2
+  ROTATION_SPEED: 2 # rad/sec
+  BREAKS: 7.5
+  SIZE: 15 #
+  controls:
+    forward: 119 # 119 - A
+    backward: 115 # 155 - S
+    left: 100 # 100 - A
+    right: 97 # 97 - D
+    shoot: 32 # 32 - spacebar
+#  img:
+#    type1:
+#    type2:
+
+WINDOW_SETTINGS:
+  TICKSPEED: 60 # 60 Ticks per second
+  WIDTH : 1920
+  HEIGHT : 1080
+  RESIZABLE: True
+  FULLSCREEN: False
+  MONITOR: 0
+  STYLE: WINDOW_STYLE_DIALOG
