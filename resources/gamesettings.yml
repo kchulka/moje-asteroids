@@ -1,18 +1,16 @@
 ---
 ship:
+  MAX_SPEED: 10
   ACCELERATION: 2
-  ROTATION_SPEED: 2 # rad/sec
+  ROTATION_SPEED: 2.5 # rad/sec
   BREAKS: 7.5
-  SIZE: 15 #
+  SIZE: 15 # window.height//SIZE
   controls:
     forward: 119 # 119 - A
     backward: 115 # 155 - S
     left: 100 # 100 - A
     right: 97 # 97 - D
     shoot: 32 # 32 - spacebar
-#  img:
-#    type1:
-#    type2:
 
 WINDOW_SETTINGS:
   TICKSPEED: 60 # 60 Ticks per second
@@ -22,3 +20,7 @@ WINDOW_SETTINGS:
   FULLSCREEN: False
   MONITOR: 0
   STYLE: WINDOW_STYLE_DIALOG
+
+LASER:
+  LASER_SPEED: 30
+  LASER_DELAY: 15
