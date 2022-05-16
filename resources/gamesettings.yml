@@ -3,7 +3,7 @@ ship:
   ACCELERATION: 2
   ROTATION_SPEED: 2 # rad/sec
   BREAKS: 7.5
-  SIZE: 8 #
+  SIZE: 15 #
   controls:
     forward: 119 # 119 - A
     backward: 115 # 155 - S
