@@ -3,6 +3,7 @@ ship:
   ACCELERATION: 2
   ROTATION_SPEED: 2 # rad/sec
   BREAKS: 7.5
+  SIZE: 8 #
   controls:
     forward: 119 # 119 - A
     backward: 115 # 155 - S
@@ -18,3 +19,6 @@ WINDOW_SETTINGS:
   WIDTH : 1920
   HEIGHT : 1080
   RESIZABLE: True
+  FULLSCREEN: False
+  MONITOR: 0
+  STYLE: WINDOW_STYLE_DIALOG
