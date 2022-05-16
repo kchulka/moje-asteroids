@@ -4,7 +4,7 @@
 import pyglet
 from pyglet.window import key
 from pyglet import gl
-from pyglet import  window
+from pyglet import window
 
 import yaml
 from yaml import Loader
