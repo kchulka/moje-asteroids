@@ -27,10 +27,8 @@ gamesettings = gamesettings()
 run = False
 
 # -- window settings --
-
-WIDTH  = 1920
-HEIGHT = 1080
-window = pyglet.window.Window(width=WIDTH, height=HEIGHT, resizable=False)
+window_data = gamesettings.data.get("WINDOW_SETTINGS")
+window = pyglet.window.Window(width=window_data.get("WIDTH"), height=window_data.get("HEIGHT"), resizable=window_data.get("RESIZABLE"))
 
 # -- Resource variables --
 
@@ -140,7 +138,7 @@ class SpaceShip(SpaceObject):
     ACCELERATION    = ship.get('ACCELERATION')
     BREAKS          = ship.get('BREAKS')
     # -- Movement values
-    controls = gamesettings.data.get('controls')
+    controls = gamesettings.data.get('ship').get("controls")
 
     controls_forward = int(controls.get("forward"))
     controls_backward = int(controls.get("backward"))

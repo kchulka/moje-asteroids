@@ -3,8 +3,14 @@ ship:
   ACCELERATION: 2
   ROTATION_SPEED: 2
   BREAKS: 7.5
-controls:
-  forward: 119
-  backward: 115
-  left: 100
-  right: 97
+  controls:
+    forward: 119 # 119 - A
+    backward: 115 # 155 - S
+    left: 100 # 100 - A
+    right: 97 # 97 - D
+    shoot: 32 # 32 - spacebar
+  img:
+WINDOW_SETTINGS:
+  WIDTH : 1920
+  HEIGHT : 1080
+  RESIZABLE: True
