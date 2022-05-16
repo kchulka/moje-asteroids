@@ -1,7 +1,7 @@
 ---
 ship:
   ACCELERATION: 2
-  ROTATION_SPEED: 2
+  ROTATION_SPEED: 2 # rad/sec
   BREAKS: 7.5
   controls:
     forward: 119 # 119 - A
@@ -9,8 +9,12 @@ ship:
     left: 100 # 100 - A
     right: 97 # 97 - D
     shoot: 32 # 32 - spacebar
-  img:
+#  img:
+#    type1:
+#    type2:
+
 WINDOW_SETTINGS:
+  TICKSPEED: 60 # 60 Ticks per second
   WIDTH : 1920
   HEIGHT : 1080
   RESIZABLE: True

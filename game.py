@@ -232,7 +232,7 @@ def rungame():
     global Space
     Space = Space()
     Space += SpaceShip(img=None, x=window.width // 2, y=window.height // 2)
-    pyglet.clock.schedule_interval(Space.tik, 1 / 60)
+    pyglet.clock.schedule_interval(Space.tik, 1/gamesettings.data.get("WINDOW_SETTINGS").get("TICKSPEED"))
 
 # -- run application --
 pyglet.app.run()
