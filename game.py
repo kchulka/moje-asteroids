@@ -9,7 +9,7 @@ from pyglet import window
 import yaml
 from yaml import Loader
 
-import random
+#import random
 import math
 
 # -- import settings from file
