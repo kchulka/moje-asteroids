@@ -133,11 +133,11 @@ class SpaceShip(SpaceObject):
 
         if self.management['left'] in stisknute_klavesy:
             """ rotace vlevo """
-            self.rotation -= dt * ROTATION_SPEED
+            self.rotation -= dt * self.ROTATION_SPEED
 
         if self.management['right'] in stisknute_klavesy:
             """ rotace vpravo """
-            self.rotation += dt * ROTATION_SPEED
+            self.rotation += dt * self.ROTATION_SPEED
 
 
 
