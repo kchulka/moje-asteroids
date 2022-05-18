@@ -1,4 +1,13 @@
 ---
+WINDOW_SETTINGS:
+  TICKSPEED: 60 # 60 Ticks per second
+  WIDTH : 1920
+  HEIGHT : 1080
+  RESIZABLE: True
+  FULLSCREEN: False
+  MONITOR: 0 # 0 = main monitor, 1 = second, etc...
+  STYLE: WINDOW_STYLE_DIALOG # This does borderless fullscreen
+
 ship:
   MAX_SPEED: 10
   ACCELERATION: 2
@@ -12,15 +21,8 @@ ship:
     right: 97 # 97 - D
     shoot: 32 # 32 - spacebar
 
-WINDOW_SETTINGS:
-  TICKSPEED: 60 # 60 Ticks per second
-  WIDTH : 1920
-  HEIGHT : 1080
-  RESIZABLE: True
-  FULLSCREEN: False
-  MONITOR: 0
-  STYLE: WINDOW_STYLE_DIALOG
-
 LASER:
   LASER_SPEED: 30
-  LASER_DELAY: 15
+  LASER_DELAY: 10
+  SIZE: 10 #window.height//SIZE
+  SIZE2: 6 # image width = SIZE // SIZE2

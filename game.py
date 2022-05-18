@@ -52,6 +52,10 @@ class Space:
         for self.o in self.objects:
             self.o.tik(dt)
 
+###############################################################################
+#                               SPACE OBJECT
+###############################################################################
+
 class SpaceObject:
 # Objects properities
 
@@ -67,8 +71,26 @@ class SpaceObject:
         self.radius = max([self.sprite.width, self.sprite.height]) / 2
 
 
+    def __str__(self):
+        return str(self.__repr__())
+
+
+    def __repr__(self):
+        return "SpaceObject({}, {}, {})".format(self.x, self.y)
+
+
+    def __del__(self):
+        self.sprite.delete()
+
+    def hit_by_spaceship(self, space_ship):
+        # -- hit by spaceship
+        pass
+
+    def hit_by_laser(self, laser):
+        # -- object hit by laser
+        pass
+
     def out_of_window(self):
-        """ objekt mimo okno aplikace """
         if self.x > window.width:
             self.x = self.sprite.x = 0
         elif self.x < 0:
@@ -114,22 +136,18 @@ class SpaceShip(SpaceObject):
 
 
     def __init__(self, img, x=window.width//2, y=window.height//2, management=dict()):
-        super().__init__(self.img, x, y, rotation=math.pi / 2)
-        self.sprite.image.width = window.height//self.ship.get("SIZE")
-        self.sprite.image.height = window.height//self.ship.get("SIZE")
-        self.centering_image()
+        super().__init__(img, x, y, rotation=math.pi/2)
         if len(management) == 0:
             self.management = {'left': self.controls_left, 'right': self.controls_right, 'forward': self.controls_forward, 'backward': self.controls_backward, 'shoot': self.controls_shoot}
         else:
             self.management = management
-
+        self.sprite.image.anchor_x = self.sprite.image.width//2
+        self.sprite.image.anchor_y = self.sprite.image.height//2
         self.lasers = []
         self.shoot_delay = 0
         super().__init__(img, x, y, rotation=math.pi/2)
-        #super().__init__(self.img, x, y)
 
     def centering_image(self):
-        """ centering of image """
         self.sprite.image.anchor_x = self.sprite.image.width//2
         self.sprite.image.anchor_y = self.sprite.image.height//2
         if self.x - self.image.anchor_x < 0:
@@ -142,7 +160,6 @@ class SpaceShip(SpaceObject):
             self.y = window.height - self.image.anchor_y
 
     def out_of_window(self):
-        """ objekt mimo okno aplikace """
         if self.x > window.width:
             self.x = self.sprite.x = 0
         elif self.x < 0:
@@ -153,7 +170,12 @@ class SpaceShip(SpaceObject):
             self.y = self.sprite.y = window.height
 
     def __repr__(self):
-        return "SpaceShip({}, {}, {})".format(self.x, self.y, self.lasers)
+        return "SpaceShip({}, {}, {})".format(self.x, self.y, self.lasers, self.sprite)
+
+    def check_collision(self):
+        for space_object in Space.objects:
+            if overlaps(self, space_object):
+                space_object.hit_by_spaceship(self)
 
     def tik(self, dt):
         self.out_of_window()
@@ -186,11 +208,13 @@ class SpaceShip(SpaceObject):
             self.shoot()
 
         super().tik(dt)
-        ### wself.check_collision()
+        #self.check_collision()
 
         for laser in self.lasers:
             laser.tik(dt)
-            #laser.check_collision()
+            self.sprite.image.width = 1
+            laser.check_collision()
+
 
     def shoot(self):
         """ výstřel """
@@ -208,20 +232,24 @@ class SpaceShip(SpaceObject):
 
 
 class Laser(SpaceObject):
-    """ třída Laser - střela """
 
     LASER = gamesettings.data.get("LASER")
     LASER_IMAGE = 'resources/lasers/laserBlue01.png'
     img = 'resources/lasers/laserBlue01.png'
     LASER_SPEED = LASER.get("LASER_SPEED")
     LASER_DELAY = LASER.get("LASER_DELAY")
+    LASER_SIZE = LASER.get("SIZE")
 
     def __init__(self, SpaceShip, img=None):
         if img == None:
             img = self.LASER_IMAGE
-        self.spaceship = SpaceShip
-        super().__init__(img, x=SpaceShip.x, y=SpaceShip.y, speed=SpaceShip.speed + Laser.LASER_SPEED,
+        super().__init__(self.img, x=SpaceShip.x, y=SpaceShip.y, speed=SpaceShip.speed + Laser.LASER_SPEED,
                          rotation=SpaceShip.rotation, group=lasers_group)
+        self.sprite.image.width = window.height//SpaceShip.ship.get("SIZE")//self.LASER.get("SIZE2")
+        self.sprite.image.height = window.height//SpaceShip.ship.get("SIZE")
+        self.sprite.image.anchor_x = self.sprite.image.width//2
+        self.sprite.image.anchor_y = self.sprite.image.height//4
+        self.spaceship = SpaceShip
 
     def __repr__(self):
         return "Laser({}, {})".format(self.x, self.y)
@@ -231,20 +259,55 @@ class Laser(SpaceObject):
         del self
 
     def out_of_window(self):
-        """ střela mimo okno """
         if self.x < 0 or self.x > window.width or self.y < 0 or self.y > window.height:
             self.delete()
 
     def check_collision(self):
-        """ kolize laseru s ostatním vesmírným objektem """
-        for space_object in vesmir.objects:
+        for space_object in Space.objects:
             if overlaps(self, space_object):
                 space_object.hit_by_laser(self)
+
+    def centering_image(self):
+        self.sprite.image.anchor_x = self.sprite.image.width//2
+        self.sprite.image.anchor_y = self.sprite.image.height
+        if self.x - self.image.anchor_x < 0:
+            self.x = self.image.anchor_x
+        elif self.x + self.image.anchor_x > window.width:
+            self.x = window.width - self.image.anchor_x
+        if self.y - self.image.anchor_y < 0:
+            self.y = self.image.anchor_y
+        elif self.y + self.image.anchor_y > window.height:
+            self.y = window.height - self.image.anchor_y
+
+    def tik(self, dt):
+        super().tik(dt)
+        self.out_of_window()
+        if window.height//self.LASER.get("SIZE")//self.LASER.get("SIZE2") > 0:
+            self.sprite.image.width = window.height//self.LASER.get("SIZE")//self.LASER.get("SIZE2")
+        else:
+            self.sprite.image.width = 1
+        self.sprite.image.height = window.height//self.LASER.get("SIZE")
+        self.centering_image()
+        self.check_collision()
 
 
 ###############################################################################
 #                               Something else
 ###############################################################################
+
+def distance(a, b, wrap_size):
+    # -- vzdálenost v jednom směru osy (x nebo y)
+    result = abs(a - b)
+    if result > wrap_size / 2:
+        result = wrap_size - result
+    return result
+
+def overlaps(a, b):
+    #překrytí objektů
+    distance_squared = (distance(a.x, b.x, window.width) ** 2 +
+                        distance(a.y, b.y, window.height) ** 2)
+    max_distance_squared = (a.radius + b.radius) ** 2
+    return distance_squared < max_distance_squared
 
 
 # --- some keyboard things
