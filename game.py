@@ -2,7 +2,7 @@
 # ------- make exe files: auto-py-to-exe
 
 import pyglet
-from pyglet.window import key
+#from pyglet.window import key
 from pyglet import gl
 from pyglet import window
 
@@ -26,10 +26,13 @@ display = pyglet.canvas.get_display()
 screens = display.get_screens()
 window_data = gamesettings.data.get("WINDOW_SETTINGS")
 if window_data.get("FULLSCREEN") == True:
-    window = pyglet.window.Window(width=window_data.get("WIDTH"), height=window_data.get("HEIGHT"), resizable=window_data.get("RESIZABLE"), fullscreen=window_data.get("FULLSCREEN"), screen=screens[int(window_data.get("MONITOR"))], style=pyglet.window.Window.WINDOW_STYLE_DIALOG )
+    window = pyglet.window.Window(width=window_data.get("WIDTH"), height=window_data.get("HEIGHT"), caption=window_data.get("TITLE"), resizable=window_data.get("RESIZABLE"), fullscreen=window_data.get("FULLSCREEN"), screen=screens[int(window_data.get("MONITOR"))], style=pyglet.window.Window.WINDOW_STYLE_DIALOG )
 else:
-    window = pyglet.window.Window(width=window_data.get("WIDTH"), height=window_data.get("HEIGHT"), resizable=window_data.get("RESIZABLE") )
+    window = pyglet.window.Window(width=window_data.get("WIDTH"), height=window_data.get("HEIGHT"), caption=window_data.get("TITLE"), resizable=window_data.get("RESIZABLE"))
 
+
+img = image = pyglet.resource.image(window_data.get("ICON"))
+window.set_icon(img)
 # -- Classes --
 
 class Space:
@@ -70,14 +73,11 @@ class SpaceObject:
         self.speed = speed
         self.radius = max([self.sprite.width, self.sprite.height]) / 2
 
-
     def __str__(self):
         return str(self.__repr__())
 
-
     def __repr__(self):
         return "SpaceObject({}, {}, {})".format(self.x, self.y)
-
 
     def __del__(self):
         self.sprite.delete()
@@ -117,6 +117,7 @@ class SpaceObject:
 
 class SpaceShip(SpaceObject):
 ## -- space ship --
+
     ship = gamesettings.data.get('ship')
     # -- Movement values
     ROTATION_SPEED  = ship.get('ROTATION_SPEED') # radians/sec
@@ -133,7 +134,6 @@ class SpaceShip(SpaceObject):
     controls_shoot = int(controls.get("shoot"))
     # -- Space ship images
     img             = 'resources/spaceships/playerShip1_blue.png'
-
 
     def __init__(self, img, x=window.width//2, y=window.height//2, management=dict()):
         super().__init__(img, x, y, rotation=math.pi/2)
@@ -215,7 +215,6 @@ class SpaceShip(SpaceObject):
             self.sprite.image.width = 1
             laser.check_collision()
 
-
     def shoot(self):
         """ výstřel """
         if self.shoot_delay == 0:
@@ -229,7 +228,6 @@ class SpaceShip(SpaceObject):
 ###############################################################################
 #                                  LASER
 ###############################################################################
-
 
 class Laser(SpaceObject):
 
@@ -248,7 +246,7 @@ class Laser(SpaceObject):
         self.sprite.image.width = window.height//SpaceShip.ship.get("SIZE")//self.LASER.get("SIZE2")
         self.sprite.image.height = window.height//SpaceShip.ship.get("SIZE")
         self.sprite.image.anchor_x = self.sprite.image.width//2
-        self.sprite.image.anchor_y = self.sprite.image.height//4
+        self.sprite.image.anchor_y = self.sprite.image.width//2
         self.spaceship = SpaceShip
 
     def __repr__(self):
@@ -259,7 +257,7 @@ class Laser(SpaceObject):
         del self
 
     def out_of_window(self):
-        if self.x < 0 or self.x > window.width or self.y < 0 or self.y > window.height:
+        if self.x < self.sprite.image.height or self.x > window.width - self.sprite.image.height or self.y < self.sprite.image.height or self.y > window.height - self.sprite.image.height:
             self.delete()
 
     def check_collision(self):
@@ -269,7 +267,7 @@ class Laser(SpaceObject):
 
     def centering_image(self):
         self.sprite.image.anchor_x = self.sprite.image.width//2
-        self.sprite.image.anchor_y = self.sprite.image.height
+        self.sprite.image.anchor_y = self.sprite.image.width//2
         if self.x - self.image.anchor_x < 0:
             self.x = self.image.anchor_x
         elif self.x + self.image.anchor_x > window.width:
@@ -282,14 +280,10 @@ class Laser(SpaceObject):
     def tik(self, dt):
         super().tik(dt)
         self.out_of_window()
-        if window.height//self.LASER.get("SIZE")//self.LASER.get("SIZE2") > 0:
-            self.sprite.image.width = window.height//self.LASER.get("SIZE")//self.LASER.get("SIZE2")
-        else:
-            self.sprite.image.width = 1
+        self.sprite.image.width = window.height//self.LASER.get("SIZE")//self.LASER.get("SIZE2")
         self.sprite.image.height = window.height//self.LASER.get("SIZE")
         self.centering_image()
         self.check_collision()
-
 
 ###############################################################################
 #                               Something else
@@ -309,7 +303,6 @@ def overlaps(a, b):
     max_distance_squared = (a.radius + b.radius) ** 2
     return distance_squared < max_distance_squared
 
-
 # --- some keyboard things
 
 pushed_keys = set()
@@ -320,8 +313,6 @@ def key_push(symbol, modifikatory):
     if run != True:
         run = True
         rungame()
-
-
 
 def key_release(symbol, modifikatory):
     global pushed_keys
@@ -343,21 +334,15 @@ def draw():
             # Restore remembered state (this cancels the glTranslatef)
             gl.glPopMatrix()
 
-
-
 window.push_handlers(
     on_key_press = key_push,
     on_key_release = key_release,
     on_draw = draw)
 
-
-
 batch = pyglet.graphics.Batch()
 background   = pyglet.graphics.OrderedGroup(0)
 lasers_group = pyglet.graphics.OrderedGroup(1)
 foreground   = pyglet.graphics.OrderedGroup(2)
-
-
 
 # -- ticks --
 

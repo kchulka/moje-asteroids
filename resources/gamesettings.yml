@@ -7,6 +7,8 @@ WINDOW_SETTINGS:
   FULLSCREEN: False
   MONITOR: 0 # 0 = main monitor, 1 = second, etc...
   STYLE: WINDOW_STYLE_DIALOG # This does borderless fullscreen
+  TITLE: "Moje Asteroids"
+  ICON: "resources/spaceships/playerShip1_blue.png"
 
 ship:
   MAX_SPEED: 10
@@ -22,7 +24,7 @@ ship:
     shoot: 32 # 32 - spacebar
 
 LASER:
-  LASER_SPEED: 30
+  LASER_SPEED: 1
   LASER_DELAY: 10
-  SIZE: 10 #window.height//SIZE
+  SIZE: 25 #window.height//SIZE
   SIZE2: 6 # image width = SIZE // SIZE2
