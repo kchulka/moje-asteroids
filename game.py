@@ -69,6 +69,11 @@ class SpaceObject:
         if group == None:
             group=foreground
         self.sprite = pyglet.sprite.Sprite(img=self.image, batch=batch, group=group)
+
+        self.sprite.image.anchor_x = self.sprite.image.width // 2
+        self.sprite.image.anchor_y = self.sprite.image.height // 2
+        self.sprite.x = self.x
+        self.sprite.y = self.y
         self.rotation = rotation
         self.speed = speed
         self.radius = max([self.sprite.width, self.sprite.height]) / 2
@@ -135,14 +140,15 @@ class SpaceShip(SpaceObject):
     # -- Space ship images
     img             = 'resources/spaceships/playerShip1_blue.png'
 
-    def __init__(self, img, x=window.width//2, y=window.height//2, management=dict()):
+    def __init__(self, img, x=window.width//2, y=window.height//2, width=window.height//20, height=window.height//20, management=dict()):
         super().__init__(img, x, y, rotation=math.pi/2)
         if len(management) == 0:
             self.management = {'left': self.controls_left, 'right': self.controls_right, 'forward': self.controls_forward, 'backward': self.controls_backward, 'shoot': self.controls_shoot}
         else:
             self.management = management
-        self.sprite.image.anchor_x = self.sprite.image.width//2
-        self.sprite.image.anchor_y = self.sprite.image.height//2
+        self.sprite.image.width = window.height//self.ship.get("SIZE")
+        self.sprite.image.height = window.height//self.ship.get("SIZE")
+
         self.lasers = []
         self.shoot_delay = 0
         super().__init__(img, x, y, rotation=math.pi/2)
@@ -253,8 +259,11 @@ class Laser(SpaceObject):
         return "Laser({}, {})".format(self.x, self.y)
 
     def delete(self):
-        self.spaceship.lasers.remove(self)
-        del self
+        try:
+            self.spaceship.lasers.remove(self)
+            del self
+        except:
+            pass
 
     def out_of_window(self):
         if self.x < self.sprite.image.height or self.x > window.width - self.sprite.image.height or self.y < self.sprite.image.height or self.y > window.height - self.sprite.image.height:
@@ -351,7 +360,7 @@ run = False
 def rungame():
     global Space
     Space = Space()
-    Space += SpaceShip(img=SpaceShip.img, x=window.width // 2, y=window.height // 2)
+    Space += SpaceShip(img=SpaceShip.img, x=window.width // 2, y=window.height // 2, width=window.height//20, height=window.height//20)
     pyglet.clock.schedule_interval(Space.tik, 1/gamesettings.data.get("WINDOW_SETTINGS").get("TICKSPEED"))
 
 # -- run application --
