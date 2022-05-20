@@ -69,7 +69,17 @@ class SpaceObject:
         if group == None:
             group=foreground
         self.sprite = pyglet.sprite.Sprite(img=self.image, batch=batch, group=group)
-
+        if type(self) is SpaceShip:
+            print("něco")
+            self.sprite.image.width = window.height//SpaceShip.ship.get("SIZE")
+            self.sprite.image.height = window.height//SpaceShip.ship.get("SIZE")
+        elif type(self) is Laser:
+            print("něco1")
+            self.sprite.image.width = window.height//Laser.LASER.get("SIZE")
+            self.sprite.image.height = window.height//Laser.LASER.get("SIZE")
+        else:
+            print("nefunguje")
+            pass
         self.sprite.image.anchor_x = self.sprite.image.width // 2
         self.sprite.image.anchor_y = self.sprite.image.height // 2
         self.sprite.x = self.x
