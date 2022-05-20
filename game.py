@@ -75,8 +75,8 @@ class SpaceObject:
             self.sprite.image.height = window.height//SpaceShip.ship.get("SIZE")
         elif type(self) is Laser:
             print("něco1")
-            self.sprite.image.width = window.height//Laser.LASER.get("SIZE")
-            self.sprite.image.height = window.height//Laser.LASER.get("SIZE")
+            self.sprite.image.width = window.height // Laser.LASER_SIZE // Laser.LASER.get("SIZE2")
+            self.sprite.image.height = window.height // Laser.LASER_SIZE
         else:
             print("nefunguje")
             pass
@@ -259,8 +259,8 @@ class Laser(SpaceObject):
             img = self.LASER_IMAGE
         super().__init__(self.img, x=SpaceShip.x, y=SpaceShip.y, speed=SpaceShip.speed + Laser.LASER_SPEED,
                          rotation=SpaceShip.rotation, group=lasers_group)
-        self.sprite.image.width = window.height//SpaceShip.ship.get("SIZE")//self.LASER.get("SIZE2")
-        self.sprite.image.height = window.height//SpaceShip.ship.get("SIZE")
+        self.sprite.image.width = window.height//self.LASER_SIZE//self.LASER.get("SIZE2")
+        self.sprite.image.height = window.height//self.LASER_SIZE
         self.sprite.image.anchor_x = self.sprite.image.width//2
         self.sprite.image.anchor_y = self.sprite.image.width//2
         self.spaceship = SpaceShip
@@ -299,8 +299,8 @@ class Laser(SpaceObject):
     def tik(self, dt):
         super().tik(dt)
         self.out_of_window()
-        self.sprite.image.width = window.height//self.LASER.get("SIZE")//self.LASER.get("SIZE2")
-        self.sprite.image.height = window.height//self.LASER.get("SIZE")
+        self.sprite.image.width = window.height//self.LASER_SIZE//self.LASER.get("SIZE2")
+        self.sprite.image.height = window.height//self.LASER_SIZE
         self.centering_image()
         self.check_collision()
 

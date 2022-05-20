@@ -24,7 +24,7 @@ ship:
     shoot: 32 # 32 - spacebar
 
 LASER:
-  LASER_SPEED: 1
+  LASER_SPEED: 20
   LASER_DELAY: 10
   SIZE: 25 #window.height//SIZE
   SIZE2: 6 # image width = SIZE // SIZE2
